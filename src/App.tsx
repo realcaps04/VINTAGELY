@@ -2,7 +2,6 @@ import { BottomNav } from './components/BottomNav'
 import { BrandRow } from './components/BrandRow'
 import { HomeHeader } from './components/HomeHeader'
 import { MostPopular } from './components/MostPopular'
-import { SearchField } from './components/SearchField'
 import { SearchOverlay } from './components/SearchOverlay'
 import { SpecialOffer } from './components/SpecialOffer'
 import { UpdateGate } from './components/UpdateGate'
@@ -28,7 +27,6 @@ function Shell() {
         className="relative w-full max-w-[430px] bg-white pb-28 shadow-[0_0_60px_rgba(0,0,0,0.08)]"
       >
         <HomeHeader />
-        <SearchField />
         <SpecialOffer />
         <BrandRow />
         <MostPopular />

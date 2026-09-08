@@ -5,7 +5,6 @@ export type TabId = 'home' | 'cart' | 'orders' | 'wallet' | 'profile'
 
 type ShopValue = {
   query: string
-  clearQuery: () => void
   brandFilter: string
   setBrandFilter: (value: string) => void
   isSearchOpen: boolean
@@ -35,7 +34,6 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
   const openSearch = useCallback(() => setIsSearchOpen(true), [])
   const closeSearch = useCallback(() => setIsSearchOpen(false), [])
-  const clearQuery = useCallback(() => setQuery(''), [])
 
   const commitSearch = useCallback((term: string) => {
     setQuery(term)
@@ -48,7 +46,6 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const value = useMemo<ShopValue>(
     () => ({
       query,
-      clearQuery,
       brandFilter,
       setBrandFilter,
       isSearchOpen,
@@ -64,7 +61,6 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     }),
     [
       query,
-      clearQuery,
       brandFilter,
       isSearchOpen,
       openSearch,

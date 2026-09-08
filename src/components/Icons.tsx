@@ -23,14 +23,6 @@ export const CloseIcon = ({ className = 'h-5 w-5', strokeWidth = 1.9 }: IconProp
   </svg>
 )
 
-export const FilterIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
-  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
-    <path d="M4 8h9M17.5 8H20M4 16h3M11.5 16H20" />
-    <circle cx="15" cy="8" r="2.1" />
-    <circle cx="9" cy="16" r="2.1" />
-  </svg>
-)
-
 export const BellIcon = ({ className = 'h-6 w-6', strokeWidth = 1.7 }: IconProps) => (
   <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
     <path d="M18 9a6 6 0 1 0-12 0c0 4.2-1.5 5.6-2 6.2-.3.4 0 1.05.5 1.05h15c.5 0 .8-.65.5-1.05-.5-.6-2-2-2-6.2Z" />
