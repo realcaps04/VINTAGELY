@@ -1,4 +1,3 @@
-import { motion } from 'motion/react'
 import { useShop } from '../store/shop'
 import { CartIcon, HomeIcon, OrdersIcon, ProfileIcon, WalletIcon } from './Icons'
 
@@ -44,14 +43,6 @@ export function BottomNav() {
               <span className={`text-[11px] ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {label}
               </span>
-
-              {isActive && (
-                <motion.span
-                  layoutId="tab-indicator"
-                  className="absolute -top-2.5 h-[3px] w-8 rounded-full bg-ink"
-                  transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-                />
-              )}
             </button>
           )
         })}
