@@ -10,6 +10,80 @@ const stroke = {
   strokeLinejoin: 'round' as const,
 }
 
+export const ChevronRightIcon = ({ className = 'h-5 w-5', strokeWidth = 1.9 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="m9 5.5 6.5 6.5L9 18.5" />
+  </svg>
+)
+
+export const LogoutIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M10 4.5H6.5A2.5 2.5 0 0 0 4 7v10a2.5 2.5 0 0 0 2.5 2.5H10" />
+    <path d="M14 8.5 18.5 12 14 15.5M18.5 12H9" />
+  </svg>
+)
+
+export const MapPinIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M12 21s6.5-5.4 6.5-10.2A6.5 6.5 0 0 0 5.5 10.8C5.5 15.6 12 21 12 21Z" />
+    <circle cx="12" cy="10.5" r="2.2" />
+  </svg>
+)
+
+export const HelpIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9.6 9.4a2.5 2.5 0 1 1 3.6 2.25c-.7.4-1.2.9-1.2 1.85" />
+    <circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none" />
+  </svg>
+)
+
+export const TrashIcon = ({ className = 'h-5 w-5', strokeWidth = 1.7 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M5 7h14" />
+    <path d="M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7" />
+    <path d="M8 7l.7 12.2A1.5 1.5 0 0 0 10.2 20.5h3.6a1.5 1.5 0 0 0 1.5-1.3L16 7" />
+    <path d="M10 11v6M14 11v6" />
+  </svg>
+)
+
+export const ArrowRightIcon = ({ className = 'h-4 w-4', strokeWidth = 2.2 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M5 12h12.5M13 6.5 18.5 12 13 17.5" />
+  </svg>
+)
+
+export const BackIcon = ({ className = 'h-6 w-6', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M15 5.5 8.5 12 15 18.5" />
+  </svg>
+)
+
+export const CheckIcon = ({ className = 'h-4 w-4', strokeWidth = 2.4 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="m5.5 12.5 4.2 4.2 8.8-9.4" />
+  </svg>
+)
+
+export const MinusIcon = ({ className = 'h-4 w-4', strokeWidth = 2 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M6 12h12" />
+  </svg>
+)
+
+export const PlusIcon = ({ className = 'h-4 w-4', strokeWidth = 2 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M12 6v12M6 12h12" />
+  </svg>
+)
+
+export const BagIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M6.5 8.5h11l-.8 11.2a2 2 0 0 1-2 1.8H9.3a2 2 0 0 1-2-1.8L6.5 8.5Z" />
+    <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" />
+  </svg>
+)
+
 export const SearchIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
   <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
     <circle cx="11" cy="11" r="7" />

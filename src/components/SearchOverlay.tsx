@@ -4,7 +4,7 @@ import type { Brand } from '../data/catalog'
 import { formatPrice, searchBrands, searchProducts, stockedBrands } from '../data/catalog'
 import { useShop } from '../store/shop'
 import { BrandMark } from './BrandMark'
-import { CloseIcon, SearchIcon } from './Icons'
+import { CloseIcon, FilterIcon, SearchIcon } from './Icons'
 import { NotFoundMessage } from './SearchEmpty'
 
 /**
@@ -19,7 +19,7 @@ export function SearchOverlay() {
 }
 
 function SearchPanel() {
-  const { query, closeSearch, commitSearch } = useShop()
+  const { query, closeSearch, commitSearch, openFilter, openProduct } = useShop()
   // Mounted fresh on every open, so the committed query seeds the draft here.
   const [draft, setDraft] = useState(query)
 
@@ -96,6 +96,14 @@ function SearchPanel() {
                 <CloseIcon className="h-4 w-4" />
               </button>
             )}
+            <button
+              type="button"
+              onClick={openFilter}
+              aria-label="Sort and filter"
+              className="shrink-0 p-0.5 text-ink transition-transform duration-200 active:scale-90"
+            >
+              <FilterIcon className="h-5 w-5" />
+            </button>
           </div>
 
           <button
@@ -134,13 +142,13 @@ function SearchPanel() {
                       <li key={product.id}>
                         <button
                           type="button"
-                          onClick={() => commitSearch(product.name)}
+                          onClick={() => openProduct(product.id)}
                           className="flex w-full items-center gap-3.5 py-3 text-left transition-opacity duration-200 active:opacity-60"
                         >
                           <img
                             src={product.image}
                             alt=""
-                            className="h-12 w-12 shrink-0 rounded-2xl bg-surface object-cover"
+                            className="h-12 w-12 shrink-0 rounded-2xl bg-white object-cover"
                           />
                           <span className="min-w-0 flex-1">
                             <span className="block truncate text-[15px] font-semibold text-ink">

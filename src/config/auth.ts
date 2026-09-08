@@ -1,12 +1,13 @@
 /**
  * Google Sign-In configuration.
  *
- * Sign-in itself is not built yet — this only reads the credential so that the
- * rest of the app never touches `import.meta.env` directly and there is a
- * single place to check before rendering any Google button.
+ * Reads the public web client ID from Vite env. Profile is locked behind a
+ * completed Google login once this value is set.
  */
 
 export const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim() ?? ''
 
-/** False when `.env` has no client ID, so sign-in UI can stay hidden. */
+/** False when `.env` has no client ID — the sign-in button stays disabled. */
 export const isGoogleAuthConfigured = googleClientId.length > 0
+
+export const AUTH_STORAGE_KEY = 'vintagely.auth.user'

@@ -1,19 +1,29 @@
 import { motion } from 'motion/react'
+import { useAuth } from '../store/auth'
 import { useShop } from '../store/shop'
 import { BellIcon, HeartIcon, SearchIcon } from './Icons'
 
 export function HomeHeader() {
-  const { wishlist, openSearch } = useShop()
+  const { user, isAuthenticated } = useAuth()
+  const { wishlist, openSearch, setActiveTab } = useShop()
 
   return (
     // Three tracks so the logo stays optically centred regardless of the
     // differing widths of the avatar and the action icons.
     <header className="grid grid-cols-[1fr_auto_1fr] items-center px-6 pt-[max(1rem,env(safe-area-inset-top))]">
-      <img
-        src="/images/app/avatar.jpg"
-        alt="Your profile"
-        className="h-12 w-12 shrink-0 justify-self-start rounded-full object-cover"
-      />
+      <button
+        type="button"
+        onClick={() => setActiveTab('profile')}
+        aria-label={isAuthenticated ? 'Open profile' : 'Sign in to open profile'}
+        className="justify-self-start transition-transform duration-200 active:scale-95"
+      >
+        <img
+          src={isAuthenticated && user?.picture ? user.picture : '/images/app/avatar.jpg'}
+          alt=""
+          referrerPolicy="no-referrer"
+          className="h-12 w-12 shrink-0 rounded-full object-cover"
+        />
+      </button>
 
       <img
         src="/logo_main.png"

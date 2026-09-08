@@ -1,35 +1,26 @@
 import { motion } from 'motion/react'
-import { popularFilters, products } from '../data/catalog'
+import { filterProducts, popularFilters, products } from '../data/catalog'
 import { useShop } from '../store/shop'
 import { ProductCard } from './ProductCard'
 import { SectionHeader } from './SectionHeader'
 
 export function MostPopular() {
-  const { query, brandFilter, setBrandFilter } = useShop()
-  const term = query.trim().toLowerCase()
-
-  const visible = products.filter((product) => {
-    const matchesBrand = brandFilter === 'All' || product.brand === brandFilter
-    const matchesQuery =
-      !term ||
-      product.name.toLowerCase().includes(term) ||
-      product.brand.toLowerCase().includes(term)
-    return matchesBrand && matchesQuery
-  })
+  const { query, filters, applyFilters, openFilter } = useShop()
+  const visible = filterProducts(products, filters, query)
 
   return (
     <section className="mt-7">
-      <SectionHeader title="Most Popular" />
+      <SectionHeader title="Most Popular" actionLabel="Filter" onAction={openFilter} />
 
       <div className="no-scrollbar mt-4 flex gap-3 overflow-x-auto px-6 pb-1">
         {popularFilters.map((option) => {
-          const isActive = option === brandFilter
+          const isActive = option === filters.category
 
           return (
             <button
               key={option}
               type="button"
-              onClick={() => setBrandFilter(option)}
+              onClick={() => applyFilters({ ...filters, category: option })}
               className={`shrink-0 rounded-full border px-6 py-2.5 text-[15px] font-semibold transition-colors duration-300 ${
                 isActive ? 'border-ink bg-ink text-white' : 'border-ink bg-white text-ink'
               }`}
@@ -56,7 +47,7 @@ export function MostPopular() {
         </div>
       ) : (
         <p className="mt-8 px-6 text-center text-[14px] font-medium text-subtle">
-          No pairs match that search yet.
+          No pairs match those filters yet.
         </p>
       )}
     </section>

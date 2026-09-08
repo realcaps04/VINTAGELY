@@ -6,7 +6,7 @@ import { useShop } from '../store/shop'
 import { AlertIcon, HeartIcon, StarIcon } from './Icons'
 
 export function ProductCard({ product }: { product: Product }) {
-  const { isWishlisted, toggleWishlist } = useShop()
+  const { isWishlisted, toggleWishlist, openProduct } = useShop()
   const wishlisted = isWishlisted(product.id)
   const [noticeOpen, setNoticeOpen] = useState(false)
   const noticeRef = useRef<HTMLDivElement>(null)
@@ -40,19 +40,26 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group">
       <div className="relative">
-        <div className="overflow-hidden rounded-[20px] bg-surface">
+        <button
+          type="button"
+          onClick={() => openProduct(product.id)}
+          className="block w-full overflow-hidden rounded-[20px] bg-white text-left"
+        >
           <img
             src={product.image}
             alt={product.name}
             loading="lazy"
             className="aspect-square w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
-        </div>
+        </button>
 
         <div ref={noticeRef} className="absolute bottom-2 left-2 z-10">
           <button
             type="button"
-            onClick={() => setNoticeOpen((open) => !open)}
+            onClick={(event) => {
+              event.stopPropagation()
+              setNoticeOpen((open) => !open)
+            }}
             aria-label="Image ownership notice"
             aria-expanded={noticeOpen}
             aria-controls={noticeId}
@@ -81,7 +88,10 @@ export function ProductCard({ product }: { product: Product }) {
 
         <button
           type="button"
-          onClick={() => toggleWishlist(product.id)}
+          onClick={(event) => {
+            event.stopPropagation()
+            toggleWishlist(product.id)
+          }}
           aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Save ${product.name}`}
           aria-pressed={wishlisted}
           className="absolute right-2.5 top-2.5 z-10 grid h-8 w-8 place-items-center rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-transform duration-200 active:scale-90"
@@ -101,7 +111,9 @@ export function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <h3 className="mt-3 truncate text-[16px] font-semibold tracking-[-0.01em]">{product.name}</h3>
+      <button type="button" onClick={() => openProduct(product.id)} className="mt-3 block w-full text-left">
+        <h3 className="truncate text-[16px] font-semibold tracking-[-0.01em]">{product.name}</h3>
+      </button>
 
       <div className="mt-2 flex items-center gap-2">
         <StarIcon className="h-3.5 w-3.5 text-ink" />

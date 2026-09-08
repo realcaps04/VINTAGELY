@@ -1,5 +1,5 @@
 import { useShop } from '../store/shop'
-import { SearchIcon } from './Icons'
+import { FilterIcon, SearchIcon } from './Icons'
 
 /** Two stacked clipboards — matches the empty-search reference art. */
 export function NotFoundIllustration({ className = 'h-36 w-36' }: { className?: string }) {
@@ -49,21 +49,31 @@ export function NotFoundMessage({ keyword }: { keyword: string }) {
  * matches nothing. The field reopens the search sheet so the user can try again.
  */
 export function SearchEmpty() {
-  const { query, openSearch } = useShop()
+  const { query, openSearch, openFilter } = useShop()
   const keyword = query.trim()
 
   return (
     <section className="mt-5 px-6 pb-8">
-      <button
-        type="button"
-        onClick={openSearch}
-        className="flex h-14 w-full items-center gap-3.5 rounded-3xl bg-surface px-5 text-left"
-      >
-        <SearchIcon className="h-5 w-5 shrink-0 text-ink" />
-        <span className="min-w-0 flex-1 truncate text-[16px] font-medium tracking-[-0.01em] text-ink">
-          {keyword}
-        </span>
-      </button>
+      <div className="flex h-14 items-center gap-3.5 rounded-3xl bg-surface px-5">
+        <button
+          type="button"
+          onClick={openSearch}
+          className="flex min-w-0 flex-1 items-center gap-3.5 text-left"
+        >
+          <SearchIcon className="h-5 w-5 shrink-0 text-ink" />
+          <span className="min-w-0 flex-1 truncate text-[16px] font-medium tracking-[-0.01em] text-ink">
+            {keyword}
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={openFilter}
+          aria-label="Sort and filter"
+          className="shrink-0 p-0.5 text-ink transition-transform duration-200 active:scale-90"
+        >
+          <FilterIcon className="h-5 w-5" />
+        </button>
+      </div>
 
       <div className="mt-5">
         <NotFoundMessage keyword={keyword} />
