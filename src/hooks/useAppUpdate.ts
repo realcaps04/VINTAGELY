@@ -18,6 +18,12 @@ export function useAppUpdate() {
   const [latestVersion, setLatestVersion] = useState<string | null>(null)
 
   useEffect(() => {
+    // `__APP_VERSION__` is frozen when the dev server boots, but /version.json is
+    // read from package.json on every request. Bumping the version mid-session
+    // therefore leaves the two permanently out of step, and since the prompt has
+    // no dismiss affordance it becomes a modal that reloading can never clear.
+    // The gate only means anything for a real build, so dev opts out entirely.
+    if (import.meta.env.DEV) return
     if (latestVersion) return
 
     const controller = new AbortController()

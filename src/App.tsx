@@ -25,7 +25,7 @@ function Shell() {
           receiving taps while the search sheet is up. */}
       <div
         inert={isSearchOpen}
-        className="relative w-full max-w-[430px] bg-white pb-32 shadow-[0_0_60px_rgba(0,0,0,0.08)]"
+        className="relative w-full max-w-[430px] bg-white pb-28 shadow-[0_0_60px_rgba(0,0,0,0.08)]"
       >
         <HomeHeader />
         <SearchField />
