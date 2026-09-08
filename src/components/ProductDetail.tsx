@@ -13,7 +13,14 @@ import {
 } from './Icons'
 
 export function ProductDetail() {
-  const { selectedProduct, closeProduct, isWishlisted, toggleWishlist, addToCart } = useShop()
+  const {
+    selectedProduct,
+    closeProduct,
+    isWishlisted,
+    toggleWishlist,
+    addToCart,
+    setActiveTab,
+  } = useShop()
 
   if (!selectedProduct) return null
 
@@ -25,6 +32,10 @@ export function ProductDetail() {
       wishlisted={isWishlisted(selectedProduct.id)}
       onToggleWishlist={() => toggleWishlist(selectedProduct.id)}
       onAddToCart={addToCart}
+      onGoToCart={() => {
+        closeProduct()
+        setActiveTab('cart')
+      }}
     />
   )
 }
@@ -35,6 +46,7 @@ function ProductDetailView({
   wishlisted,
   onToggleWishlist,
   onAddToCart,
+  onGoToCart,
 }: {
   productId: string
   onBack: () => void
@@ -46,6 +58,7 @@ function ProductDetailView({
     color: string
     quantity: number
   }) => void
+  onGoToCart: () => void
 }) {
   const { selectedProduct } = useShop()
   const product = selectedProduct!
@@ -57,11 +70,16 @@ function ProductDetailView({
   const [color, setColor] = useState(product.colors[0])
   const [quantity, setQuantity] = useState(1)
   const [expanded, setExpanded] = useState(false)
-  const [addedFlash, setAddedFlash] = useState(false)
+  const [inCart, setInCart] = useState(false)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
   }, [productId])
+
+  // Changing options means this is a new line — offer Add again instead of Go to Cart.
+  useEffect(() => {
+    setInCart(false)
+  }, [size, color, quantity])
 
   const handleScroll = () => {
     const track = trackRef.current
@@ -69,10 +87,13 @@ function ProductDetailView({
     setImageIndex(Math.round(track.scrollLeft / track.clientWidth))
   }
 
-  const handleAdd = () => {
+  const handleCartAction = () => {
+    if (inCart) {
+      onGoToCart()
+      return
+    }
     onAddToCart({ productId: product.id, size, color, quantity })
-    setAddedFlash(true)
-    window.setTimeout(() => setAddedFlash(false), 1200)
+    setInCart(true)
   }
 
   const description = expanded
@@ -253,19 +274,19 @@ function ProductDetailView({
 
           <button
             type="button"
-            onClick={handleAdd}
+            onClick={handleCartAction}
             className="ml-auto flex items-center gap-2.5 rounded-full bg-ink px-7 py-4 text-[15px] font-bold text-white shadow-[0_12px_28px_-10px_rgba(0,0,0,0.45)] transition-transform duration-200 active:scale-[0.98]"
           >
             <BagIcon className="h-5 w-5" />
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
-                key={addedFlash ? 'added' : 'add'}
+                key={inCart ? 'go' : 'add'}
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.15 }}
               >
-                {addedFlash ? 'Added' : 'Add to Cart'}
+                {inCart ? 'Go to Cart' : 'Add to Cart'}
               </motion.span>
             </AnimatePresence>
           </button>
