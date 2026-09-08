@@ -34,14 +34,6 @@ export function HomeHeader() {
         <button
           type="button"
           className="relative p-1 transition-transform duration-200 active:scale-90"
-          aria-label="Notifications"
-        >
-          <BellIcon />
-        </button>
-
-        <button
-          type="button"
-          className="relative p-1 transition-transform duration-200 active:scale-90"
           aria-label={`Wishlist, ${wishlist.length} items`}
         >
           <HeartIcon />
@@ -56,6 +48,14 @@ export function HomeHeader() {
               {wishlist.length}
             </motion.span>
           )}
+        </button>
+
+        <button
+          type="button"
+          className="relative p-1 transition-transform duration-200 active:scale-90"
+          aria-label="Notifications"
+        >
+          <BellIcon />
         </button>
       </div>
     </header>
