@@ -13,6 +13,7 @@ export type Product = {
   id: string
   name: string
   brand: string
+  gender: 'Men' | 'Women'
   rating: number
   sold: number
   price: number
@@ -24,6 +25,7 @@ export const products: Product[] = [
     id: 'vista-trainer',
     name: 'VNT Vista Trainer Pro',
     brand: 'Nike',
+    gender: 'Men',
     rating: 4.5,
     sold: 8879,
     price: 1999,
@@ -33,6 +35,7 @@ export const products: Product[] = [
     id: 'runner-x-women',
     name: 'VNT Runner X Women Sneakers',
     brand: 'Puma',
+    gender: 'Women',
     rating: 4.7,
     sold: 7483,
     price: 2499,
@@ -42,6 +45,7 @@ export const products: Product[] = [
     id: 'windshift-15',
     name: 'VNT Windshift 15',
     brand: 'Adidas',
+    gender: 'Men',
     rating: 4.3,
     sold: 6937,
     price: 1599,
@@ -51,6 +55,7 @@ export const products: Product[] = [
     id: 'glass-package',
     name: 'VNT Glass Package',
     brand: 'Nike',
+    gender: 'Women',
     rating: 4.9,
     sold: 8174,
     price: 1799,
@@ -60,6 +65,7 @@ export const products: Product[] = [
     id: 'suede-classic',
     name: 'VNT Suede Classic',
     brand: 'Puma',
+    gender: 'Men',
     rating: 4.6,
     sold: 6843,
     price: 2799,
@@ -69,6 +75,7 @@ export const products: Product[] = [
     id: 'trainer-w',
     name: 'VNT Trainer W',
     brand: 'Fila',
+    gender: 'Women',
     rating: 4.5,
     sold: 7758,
     price: 2199,
@@ -137,6 +144,94 @@ export const brands: Brand[] = [
 ]
 
 export const popularFilters = ['All', 'Nike', 'Adidas', 'Puma', 'Fila']
+
+export const genderOptions = ['All', 'Men', 'Women'] as const
+export type GenderOption = (typeof genderOptions)[number]
+
+export const sortOptions = ['Popular', 'Most Recent', 'Price High', 'Price Low'] as const
+export type SortOption = (typeof sortOptions)[number]
+
+export const ratingOptions = ['All', '5', '4', '3', '2'] as const
+export type RatingOption = (typeof ratingOptions)[number]
+
+export const priceBounds = {
+  min: Math.min(...products.map((product) => product.price)),
+  max: Math.max(...products.map((product) => product.price)),
+}
+
+/** Soft outer limits so the slider has room past the cheapest / dearest pair. */
+export const priceSlider = {
+  min: 1000,
+  max: 3500,
+  step: 50,
+}
+
+export type ProductFilters = {
+  category: string
+  gender: GenderOption
+  priceMin: number
+  priceMax: number
+  sortBy: SortOption
+  rating: RatingOption
+}
+
+export const defaultFilters: ProductFilters = {
+  category: 'All',
+  gender: 'All',
+  priceMin: priceSlider.min,
+  priceMax: priceSlider.max,
+  sortBy: 'Popular',
+  rating: 'All',
+}
+
+const HISTOGRAM_BINS = 24
+
+export const priceHistogram = Array.from({ length: HISTOGRAM_BINS }, (_, index) => {
+  const span = priceSlider.max - priceSlider.min
+  const start = priceSlider.min + (span / HISTOGRAM_BINS) * index
+  const end = start + span / HISTOGRAM_BINS
+  return products.filter((product) => product.price >= start && product.price < end).length
+})
+
+export const filterProducts = (
+  list: Product[],
+  filters: ProductFilters,
+  query = '',
+): Product[] => {
+  const term = query.trim().toLowerCase()
+  const minRating = filters.rating === 'All' ? 0 : Number(filters.rating)
+
+  const matched = list.filter((product) => {
+    const matchesBrand = filters.category === 'All' || product.brand === filters.category
+    const matchesGender = filters.gender === 'All' || product.gender === filters.gender
+    const matchesPrice = product.price >= filters.priceMin && product.price <= filters.priceMax
+    const matchesRating = product.rating >= minRating
+    const matchesQuery =
+      !term ||
+      product.name.toLowerCase().includes(term) ||
+      product.brand.toLowerCase().includes(term)
+    return matchesBrand && matchesGender && matchesPrice && matchesRating && matchesQuery
+  })
+
+  const sorted = [...matched]
+  switch (filters.sortBy) {
+    case 'Most Recent':
+      sorted.reverse()
+      break
+    case 'Price High':
+      sorted.sort((a, b) => b.price - a.price)
+      break
+    case 'Price Low':
+      sorted.sort((a, b) => a.price - b.price)
+      break
+    case 'Popular':
+    default:
+      sorted.sort((a, b) => b.sold - a.sold)
+      break
+  }
+
+  return sorted
+}
 
 /**
  * Brands we actually carry stock for. Search only ever suggests these, so a

@@ -1,16 +1,21 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
+import { defaultFilters, type ProductFilters } from '../data/catalog'
 
 export type TabId = 'home' | 'cart' | 'orders' | 'wallet' | 'profile'
 
 type ShopValue = {
   query: string
-  brandFilter: string
-  setBrandFilter: (value: string) => void
+  filters: ProductFilters
+  applyFilters: (next: ProductFilters) => void
+  resetFilters: () => void
   isSearchOpen: boolean
   openSearch: () => void
   closeSearch: () => void
   commitSearch: (term: string) => void
+  isFilterOpen: boolean
+  openFilter: () => void
+  closeFilter: () => void
   wishlist: string[]
   toggleWishlist: (id: string) => void
   isWishlisted: (id: string) => boolean
@@ -23,8 +28,9 @@ const ShopContext = createContext<ShopValue | null>(null)
 
 export function ShopProvider({ children }: { children: ReactNode }) {
   const [query, setQuery] = useState('')
-  const [brandFilter, setBrandFilter] = useState('All')
+  const [filters, setFilters] = useState<ProductFilters>(defaultFilters)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [wishlist, setWishlist] = useState<string[]>([])
   const [activeTab, setActiveTab] = useState<TabId>('home')
 
@@ -32,26 +38,46 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     setWishlist((ids) => (ids.includes(id) ? ids.filter((value) => value !== id) : [...ids, id]))
   }, [])
 
-  const openSearch = useCallback(() => setIsSearchOpen(true), [])
+  const openSearch = useCallback(() => {
+    setIsFilterOpen(false)
+    setIsSearchOpen(true)
+  }, [])
   const closeSearch = useCallback(() => setIsSearchOpen(false), [])
+  const openFilter = useCallback(() => {
+    setIsSearchOpen(false)
+    setIsFilterOpen(true)
+  }, [])
+  const closeFilter = useCallback(() => setIsFilterOpen(false), [])
+
+  const applyFilters = useCallback((next: ProductFilters) => {
+    setFilters(next)
+    setIsFilterOpen(false)
+  }, [])
+
+  const resetFilters = useCallback(() => {
+    setFilters(defaultFilters)
+  }, [])
 
   const commitSearch = useCallback((term: string) => {
     setQuery(term)
-    // A brand chip left selected from earlier would silently narrow the results
-    // the search just produced, so searching always widens back to every brand.
-    setBrandFilter('All')
+    // Searching widens category so a leftover brand chip can't empty the grid.
+    setFilters((current) => ({ ...current, category: 'All' }))
     setIsSearchOpen(false)
   }, [])
 
   const value = useMemo<ShopValue>(
     () => ({
       query,
-      brandFilter,
-      setBrandFilter,
+      filters,
+      applyFilters,
+      resetFilters,
       isSearchOpen,
       openSearch,
       closeSearch,
       commitSearch,
+      isFilterOpen,
+      openFilter,
+      closeFilter,
       wishlist,
       toggleWishlist,
       isWishlisted: (id: string) => wishlist.includes(id),
@@ -61,11 +87,16 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     }),
     [
       query,
-      brandFilter,
+      filters,
+      applyFilters,
+      resetFilters,
       isSearchOpen,
       openSearch,
       closeSearch,
       commitSearch,
+      isFilterOpen,
+      openFilter,
+      closeFilter,
       wishlist,
       toggleWishlist,
       activeTab,

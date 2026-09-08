@@ -5,6 +5,7 @@ import { formatPrice, searchBrands, searchProducts, stockedBrands } from '../dat
 import { useShop } from '../store/shop'
 import { BrandMark } from './BrandMark'
 import { CloseIcon, SearchIcon } from './Icons'
+import { NotFoundMessage } from './SearchEmpty'
 
 /**
  * Full-screen search sheet. While it is open the home screen behind it is made
@@ -112,16 +113,8 @@ function SearchPanel() {
           )}
 
           {term && !hasMatches && (
-            <div className="pt-10 text-center">
-              <p className="text-[15px] font-semibold text-ink">
-                Nothing in store matches “{term}”
-              </p>
-              <p className="mt-1.5 text-[13.5px] text-subtle">Try one of the brands we carry.</p>
-              <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-                {stockedBrands.map((brand) => (
-                  <BrandChip key={brand.id} brand={brand} onPick={commitSearch} />
-                ))}
-              </div>
+            <div className="pt-5">
+              <NotFoundMessage keyword={term} />
             </div>
           )}
 
