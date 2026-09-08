@@ -1,4 +1,5 @@
 import { brands } from '../data/catalog'
+import { BrandMark } from './BrandMark'
 
 export function BrandRow({
   selected,
@@ -20,11 +21,17 @@ export function BrandRow({
             className="flex flex-col items-center gap-2"
           >
             <span
-              className={`flex h-16 w-16 items-center justify-center rounded-full text-[19px] font-extrabold tracking-[-0.03em] transition-all duration-300 active:scale-95 ${
+              className={`flex h-16 w-16 items-center justify-center rounded-full transition-colors duration-300 active:scale-95 ${
                 isActive ? 'bg-ink text-white' : 'bg-surface text-ink'
               }`}
             >
-              {brand.mark}
+              {brand.icon ? (
+                <BrandMark icon={brand.icon} className="h-7 w-7" />
+              ) : (
+                <span className="text-[19px] font-extrabold leading-none tracking-[-0.05em]">
+                  ···
+                </span>
+              )}
             </span>
             <span className="w-full truncate text-center text-[13px] font-semibold">
               {brand.name}

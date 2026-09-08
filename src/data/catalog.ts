@@ -1,3 +1,14 @@
+import {
+  siAdidas,
+  siFila,
+  siJordan,
+  siNewbalance,
+  siNike,
+  siPuma,
+  siReebok,
+} from 'simple-icons'
+import type { SimpleIcon } from 'simple-icons'
+
 export type Product = {
   id: string
   name: string
@@ -57,7 +68,7 @@ export const products: Product[] = [
   {
     id: 'trainer-w',
     name: 'VNT Trainer W',
-    brand: 'Asics',
+    brand: 'Fila',
     rating: 4.5,
     sold: 7758,
     price: 90,
@@ -65,22 +76,25 @@ export const products: Product[] = [
   },
 ]
 
-/**
- * Storefront brands. `mark` is a neutral placeholder monogram — swap in a
- * licensed logo asset per brand when you have the rights to use them.
- */
-export const brands = [
-  { id: 'nike', name: 'Nike', mark: 'N' },
-  { id: 'adidas', name: 'Adidas', mark: 'A' },
-  { id: 'puma', name: 'Puma', mark: 'P' },
-  { id: 'asics', name: 'Asics', mark: 'AS' },
-  { id: 'reebok', name: 'Reebok', mark: 'R' },
-  { id: 'new-balance', name: 'New Balance', mark: 'NB' },
-  { id: 'converse', name: 'Converse', mark: 'C' },
-  { id: 'more', name: 'More', mark: '···' },
+export type Brand = {
+  id: string
+  name: string
+  /** Omitted for the trailing "More" tile, which renders an ellipsis instead. */
+  icon?: SimpleIcon
+}
+
+export const brands: Brand[] = [
+  { id: 'nike', name: 'Nike', icon: siNike },
+  { id: 'adidas', name: 'Adidas', icon: siAdidas },
+  { id: 'puma', name: 'Puma', icon: siPuma },
+  { id: 'fila', name: 'Fila', icon: siFila },
+  { id: 'reebok', name: 'Reebok', icon: siReebok },
+  { id: 'new-balance', name: 'New Balance', icon: siNewbalance },
+  { id: 'jordan', name: 'Jordan', icon: siJordan },
+  { id: 'more', name: 'More' },
 ]
 
-export const popularFilters = ['All', 'Nike', 'Adidas', 'Puma', 'Asics']
+export const popularFilters = ['All', 'Nike', 'Adidas', 'Puma', 'Fila']
 
 export const formatPrice = (value: number) =>
   `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
