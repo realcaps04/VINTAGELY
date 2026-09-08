@@ -6,6 +6,7 @@ import { MostPopular } from './components/MostPopular'
 import { SearchField } from './components/SearchField'
 import { SpecialOffer } from './components/SpecialOffer'
 import { StatusBar } from './components/StatusBar'
+import { UpdateGate } from './components/UpdateGate'
 import { ShopProvider } from './store/shop'
 
 export default function App() {
@@ -23,6 +24,8 @@ export default function App() {
           <MostPopular filter={filter} onFilterChange={setFilter} />
           <BottomNav />
         </div>
+
+        <UpdateGate />
       </div>
     </ShopProvider>
   )

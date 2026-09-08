@@ -76,6 +76,51 @@ export const products: Product[] = [
   },
 ]
 
+export type Offer = {
+  id: string
+  headline: string
+  title: string
+  body: string
+  image: string
+  /** Drives the glow beneath the card so it picks up the artwork's colour. */
+  glow: string
+}
+
+export const offers: Offer[] = [
+  {
+    id: 'today',
+    headline: '25%',
+    title: "Today's Special!",
+    body: 'Get discount for every order. only valid for today',
+    image: '/images/app/offer-red.jpg',
+    glow: 'rgba(198,13,22,0.5)',
+  },
+  {
+    id: 'weekend',
+    headline: '40%',
+    title: 'Weekend Drop!',
+    body: 'Selected sneakers at their lowest price this season',
+    image: '/images/app/offer-indigo.jpg',
+    glow: 'rgba(26,35,92,0.5)',
+  },
+  {
+    id: 'season',
+    headline: '30%',
+    title: 'New Season Sale!',
+    body: 'Fresh arrivals marked down for a limited time only',
+    image: '/images/app/offer-emerald.jpg',
+    glow: 'rgba(15,79,58,0.5)',
+  },
+  {
+    id: 'clearance',
+    headline: '50%',
+    title: 'Clearance Deal!',
+    body: 'Last pairs from the previous drop, while stocks last',
+    image: '/images/app/offer-amber.jpg',
+    glow: 'rgba(178,72,24,0.5)',
+  },
+]
+
 export type Brand = {
   id: string
   name: string

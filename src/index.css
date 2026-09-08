@@ -54,9 +54,3 @@
     display: none;
   }
 }
-
-/* Fades the left edge of the offer photograph into the card gradient. */
-@utility offer-fade {
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 42%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 42%);
-}

@@ -138,6 +138,13 @@ export const ProfileIcon = ({
   </svg>
 )
 
+export const DownloadIcon = ({ className = 'h-6 w-6', strokeWidth = 1.7 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M12 3.5v11M7.8 10.4 12 14.6l4.2-4.2" />
+    <path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2" />
+  </svg>
+)
+
 /* Device status bar ------------------------------------------------------- */
 
 export const SignalIcon = ({ className = 'h-3 w-4' }: IconProps) => (
