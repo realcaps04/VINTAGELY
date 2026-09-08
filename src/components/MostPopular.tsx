@@ -36,7 +36,7 @@ export function MostPopular({
               key={option}
               type="button"
               onClick={() => onFilterChange(option)}
-              className={`shrink-0 rounded-full border px-6 py-2.5 text-[14px] font-semibold transition-colors duration-300 ${
+              className={`shrink-0 rounded-full border px-6 py-2.5 text-[15px] font-semibold transition-colors duration-300 ${
                 isActive ? 'border-ink bg-ink text-white' : 'border-ink bg-white text-ink'
               }`}
             >

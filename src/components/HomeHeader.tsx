@@ -6,19 +6,12 @@ export function HomeHeader() {
   const { wishlist } = useShop()
 
   return (
-    <header className="flex items-center gap-3.5 px-6 pt-4">
+    <header className="flex items-center gap-1 px-6 pt-4">
       <img
         src="/images/app/avatar.jpg"
-        alt="Andrew Ainsley"
-        className="h-12 w-12 shrink-0 rounded-full object-cover"
+        alt="Your profile"
+        className="mr-auto h-12 w-12 shrink-0 rounded-full object-cover"
       />
-
-      <div className="min-w-0 flex-1">
-        <p className="text-[13px] font-medium text-subtle">Good Morning 👋</p>
-        <h1 className="truncate text-[19px] font-bold leading-tight tracking-[-0.01em]">
-          Andrew Ainsley
-        </h1>
-      </div>
 
       <button
         type="button"

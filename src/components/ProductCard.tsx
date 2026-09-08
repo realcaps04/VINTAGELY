@@ -40,20 +40,18 @@ export function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <h3 className="mt-3 truncate text-[15px] font-bold tracking-[-0.01em]">{product.name}</h3>
+      <h3 className="mt-3 truncate text-[16px] font-semibold tracking-[-0.01em]">{product.name}</h3>
 
-      <div className="mt-1.5 flex items-center gap-2">
+      <div className="mt-2 flex items-center gap-2">
         <StarIcon className="h-3.5 w-3.5 text-ink" />
-        <span className="text-[12px] font-bold leading-none">{product.rating.toFixed(1)}</span>
+        <span className="text-[13px] font-semibold leading-none">{product.rating.toFixed(1)}</span>
         <span className="h-3 w-px bg-hairline" />
-        <span className="text-[11px] font-medium leading-none text-subtle">
+        <span className="text-[12px] font-medium leading-none text-subtle">
           {formatSold(product.sold)} sold
         </span>
       </div>
 
-      <p className="mt-1.5 text-[17px] font-extrabold tracking-[-0.01em]">
-        {formatPrice(product.price)}
-      </p>
+      <p className="mt-2 text-[18px] font-bold tracking-[-0.02em]">{formatPrice(product.price)}</p>
     </article>
   )
 }

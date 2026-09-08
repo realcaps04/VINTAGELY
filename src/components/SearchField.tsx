@@ -13,7 +13,7 @@ export function SearchField() {
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search"
           aria-label="Search products"
-          className="min-w-0 flex-1 bg-transparent font-inter text-[16px] font-normal tracking-[-0.005em] text-ink outline-none placeholder:font-normal placeholder:text-subtle focus-visible:outline-none"
+          className="min-w-0 flex-1 bg-transparent text-[16px] font-normal tracking-[-0.01em] text-ink outline-none placeholder:font-normal placeholder:text-subtle focus-visible:outline-none"
         />
         <button
           type="button"

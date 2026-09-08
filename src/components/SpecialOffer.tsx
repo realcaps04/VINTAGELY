@@ -14,13 +14,13 @@ export function SpecialOffer() {
           />
 
           <div className="relative max-w-[60%] px-6 py-7">
-            <p className="text-[40px] font-extrabold leading-none tracking-[-0.02em] text-white">
+            <p className="text-[42px] font-extrabold leading-none tracking-[-0.03em] text-white">
               25%
             </p>
-            <p className="mt-2.5 text-[17px] font-bold leading-tight text-white">
+            <p className="mt-2.5 text-[17px] font-bold leading-tight tracking-[-0.01em] text-white">
               Today&apos;s Special!
             </p>
-            <p className="mt-2 text-[11.5px] font-medium leading-[1.5] text-white/85">
+            <p className="mt-2 text-[12.5px] font-medium leading-[1.5] text-white/85">
               Get discount for every order. only valid for today
             </p>
           </div>

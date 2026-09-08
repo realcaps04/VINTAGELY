@@ -33,7 +33,7 @@ export function BrandRow({
                 </span>
               )}
             </span>
-            <span className="w-full truncate text-center text-[13px] font-semibold">
+            <span className="w-full truncate text-center text-[14px] font-medium">
               {brand.name}
             </span>
           </button>
