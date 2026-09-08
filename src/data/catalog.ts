@@ -141,6 +141,32 @@ export const brands: Brand[] = [
 
 export const popularFilters = ['All', 'Nike', 'Adidas', 'Puma', 'Fila']
 
+/**
+ * Brands we actually carry stock for. Search only ever suggests these, so a
+ * suggestion can never lead to an empty results grid.
+ */
+export const stockedBrands = brands.filter(
+  (brand) => brand.icon && products.some((product) => product.brand === brand.name),
+)
+
+export const searchProducts = (term: string): Product[] => {
+  const needle = term.trim().toLowerCase()
+  if (!needle) return []
+
+  return products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(needle) ||
+      product.brand.toLowerCase().includes(needle),
+  )
+}
+
+export const searchBrands = (term: string): Brand[] => {
+  const needle = term.trim().toLowerCase()
+  if (!needle) return []
+
+  return stockedBrands.filter((brand) => brand.name.toLowerCase().includes(needle))
+}
+
 export const formatPrice = (value: number) => `₹${value.toLocaleString('en-IN')}`
 
 export const formatSold = (value: number) => value.toLocaleString('en-IN')

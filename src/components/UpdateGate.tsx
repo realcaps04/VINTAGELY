@@ -8,7 +8,7 @@ import { DownloadIcon } from './Icons'
  * version is published the running client must reload before it can be used.
  */
 export function UpdateGate() {
-  const { currentVersion, latestVersion, updateRequired } = useAppUpdate()
+  const { updateRequired } = useAppUpdate()
   const [isApplying, setIsApplying] = useState(false)
   const confirmRef = useRef<HTMLButtonElement>(null)
 
@@ -64,16 +64,14 @@ export function UpdateGate() {
               <DownloadIcon className="h-6 w-6" />
             </span>
 
-            <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-subtle">
-              Update Required
-            </p>
+            <p className="mt-5 text-[13px] font-semibold text-subtle">Update Required</p>
 
             <h2 id="update-title" className="mt-2 text-[22px] font-bold tracking-[-0.02em]">
               A new version is available
             </h2>
 
             <p id="update-body" className="mt-2.5 text-[14px] leading-relaxed text-subtle">
-              Version {latestVersion} is ready. Update now to continue using Vintagely.
+              Update now to continue using Vintagely.
             </p>
 
             <button
@@ -85,10 +83,6 @@ export function UpdateGate() {
             >
               {isApplying ? 'Updating…' : 'Update Now'}
             </button>
-
-            <p className="mt-3.5 text-[12px] font-medium text-subtle">
-              You&apos;re on version {currentVersion}
-            </p>
           </motion.div>
         </motion.div>
       )}

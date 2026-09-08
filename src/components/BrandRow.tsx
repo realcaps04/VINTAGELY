@@ -1,23 +1,20 @@
 import { brands } from '../data/catalog'
+import { useShop } from '../store/shop'
 import { BrandMark } from './BrandMark'
 
-export function BrandRow({
-  selected,
-  onSelect,
-}: {
-  selected: string
-  onSelect: (brand: string) => void
-}) {
+export function BrandRow() {
+  const { brandFilter, setBrandFilter } = useShop()
+
   return (
     <nav className="mt-6 grid grid-cols-4 gap-x-3 gap-y-5 px-6" aria-label="Shop by brand">
       {brands.map((brand) => {
-        const isActive = selected === brand.name
+        const isActive = brandFilter === brand.name
 
         return (
           <button
             key={brand.id}
             type="button"
-            onClick={() => onSelect(brand.name === 'More' ? 'All' : brand.name)}
+            onClick={() => setBrandFilter(brand.name === 'More' ? 'All' : brand.name)}
             className="flex flex-col items-center gap-2"
           >
             <span

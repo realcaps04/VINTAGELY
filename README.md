@@ -1,4 +1,4 @@
-# VINTAGELY
+# Vintagely
 
 Footwear storefront — mobile app home screen built with React, TypeScript, Vite, Tailwind CSS v4 and Motion.
 

@@ -4,18 +4,12 @@ import { useShop } from '../store/shop'
 import { ProductCard } from './ProductCard'
 import { SectionHeader } from './SectionHeader'
 
-export function MostPopular({
-  filter,
-  onFilterChange,
-}: {
-  filter: string
-  onFilterChange: (value: string) => void
-}) {
-  const { query } = useShop()
+export function MostPopular() {
+  const { query, brandFilter, setBrandFilter } = useShop()
   const term = query.trim().toLowerCase()
 
   const visible = products.filter((product) => {
-    const matchesBrand = filter === 'All' || product.brand === filter
+    const matchesBrand = brandFilter === 'All' || product.brand === brandFilter
     const matchesQuery =
       !term ||
       product.name.toLowerCase().includes(term) ||
@@ -29,13 +23,13 @@ export function MostPopular({
 
       <div className="no-scrollbar mt-4 flex gap-3 overflow-x-auto px-6 pb-1">
         {popularFilters.map((option) => {
-          const isActive = option === filter
+          const isActive = option === brandFilter
 
           return (
             <button
               key={option}
               type="button"
-              onClick={() => onFilterChange(option)}
+              onClick={() => setBrandFilter(option)}
               className={`shrink-0 rounded-full border px-6 py-2.5 text-[15px] font-semibold transition-colors duration-300 ${
                 isActive ? 'border-ink bg-ink text-white' : 'border-ink bg-white text-ink'
               }`}

@@ -17,6 +17,12 @@ export const SearchIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconPro
   </svg>
 )
 
+export const CloseIcon = ({ className = 'h-5 w-5', strokeWidth = 1.9 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="m6.5 6.5 11 11M17.5 6.5l-11 11" />
+  </svg>
+)
+
 export const FilterIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
   <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
     <path d="M4 8h9M17.5 8H20M4 16h3M11.5 16H20" />

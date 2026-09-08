@@ -5,7 +5,13 @@ export type TabId = 'home' | 'cart' | 'orders' | 'wallet' | 'profile'
 
 type ShopValue = {
   query: string
-  setQuery: (value: string) => void
+  clearQuery: () => void
+  brandFilter: string
+  setBrandFilter: (value: string) => void
+  isSearchOpen: boolean
+  openSearch: () => void
+  closeSearch: () => void
+  commitSearch: (term: string) => void
   wishlist: string[]
   toggleWishlist: (id: string) => void
   isWishlisted: (id: string) => boolean
@@ -18,6 +24,8 @@ const ShopContext = createContext<ShopValue | null>(null)
 
 export function ShopProvider({ children }: { children: ReactNode }) {
   const [query, setQuery] = useState('')
+  const [brandFilter, setBrandFilter] = useState('All')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [wishlist, setWishlist] = useState<string[]>([])
   const [activeTab, setActiveTab] = useState<TabId>('home')
 
@@ -25,10 +33,28 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     setWishlist((ids) => (ids.includes(id) ? ids.filter((value) => value !== id) : [...ids, id]))
   }, [])
 
+  const openSearch = useCallback(() => setIsSearchOpen(true), [])
+  const closeSearch = useCallback(() => setIsSearchOpen(false), [])
+  const clearQuery = useCallback(() => setQuery(''), [])
+
+  const commitSearch = useCallback((term: string) => {
+    setQuery(term)
+    // A brand chip left selected from earlier would silently narrow the results
+    // the search just produced, so searching always widens back to every brand.
+    setBrandFilter('All')
+    setIsSearchOpen(false)
+  }, [])
+
   const value = useMemo<ShopValue>(
     () => ({
       query,
-      setQuery,
+      clearQuery,
+      brandFilter,
+      setBrandFilter,
+      isSearchOpen,
+      openSearch,
+      closeSearch,
+      commitSearch,
       wishlist,
       toggleWishlist,
       isWishlisted: (id: string) => wishlist.includes(id),
@@ -36,7 +62,18 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       activeTab,
       setActiveTab,
     }),
-    [query, wishlist, toggleWishlist, activeTab],
+    [
+      query,
+      clearQuery,
+      brandFilter,
+      isSearchOpen,
+      openSearch,
+      closeSearch,
+      commitSearch,
+      wishlist,
+      toggleWishlist,
+      activeTab,
+    ],
   )
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>

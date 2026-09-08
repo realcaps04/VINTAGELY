@@ -1,9 +1,9 @@
 import { motion } from 'motion/react'
 import { useShop } from '../store/shop'
-import { BellIcon, HeartIcon } from './Icons'
+import { BellIcon, HeartIcon, SearchIcon } from './Icons'
 
 export function HomeHeader() {
-  const { wishlist } = useShop()
+  const { wishlist, openSearch } = useShop()
 
   return (
     // Three tracks so the logo stays optically centred regardless of the
@@ -22,6 +22,15 @@ export function HomeHeader() {
       />
 
       <div className="flex items-center gap-1 justify-self-end">
+        <button
+          type="button"
+          onClick={openSearch}
+          className="relative p-1 transition-transform duration-200 active:scale-90"
+          aria-label="Search"
+        >
+          <SearchIcon className="h-6 w-6" />
+        </button>
+
         <button
           type="button"
           className="relative p-1 transition-transform duration-200 active:scale-90"
