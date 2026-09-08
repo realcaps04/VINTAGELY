@@ -5,7 +5,6 @@ import { HomeHeader } from './components/HomeHeader'
 import { MostPopular } from './components/MostPopular'
 import { SearchField } from './components/SearchField'
 import { SpecialOffer } from './components/SpecialOffer'
-import { StatusBar } from './components/StatusBar'
 import { UpdateGate } from './components/UpdateGate'
 import { ShopProvider } from './store/shop'
 
@@ -16,7 +15,6 @@ export default function App() {
     <ShopProvider>
       <div className="flex min-h-dvh justify-center">
         <div className="relative w-full max-w-[430px] bg-white pb-32 shadow-[0_0_60px_rgba(0,0,0,0.08)]">
-          <StatusBar />
           <HomeHeader />
           <SearchField />
           <SpecialOffer />

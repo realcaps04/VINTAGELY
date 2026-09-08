@@ -8,7 +8,7 @@ export function HomeHeader() {
   return (
     // Three tracks so the logo stays optically centred regardless of the
     // differing widths of the avatar and the action icons.
-    <header className="grid grid-cols-[1fr_auto_1fr] items-center px-6 pt-4">
+    <header className="grid grid-cols-[1fr_auto_1fr] items-center px-6 pt-[max(1rem,env(safe-area-inset-top))]">
       <img
         src="/images/app/avatar.jpg"
         alt="Your profile"
