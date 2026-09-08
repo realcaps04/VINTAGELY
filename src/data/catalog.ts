@@ -26,7 +26,7 @@ export const products: Product[] = [
     brand: 'Nike',
     rating: 4.5,
     sold: 8879,
-    price: 85,
+    price: 1999,
     image: '/images/app/s1.jpg',
   },
   {
@@ -35,7 +35,7 @@ export const products: Product[] = [
     brand: 'Puma',
     rating: 4.7,
     sold: 7483,
-    price: 110,
+    price: 2499,
     image: '/images/app/s2.jpg',
   },
   {
@@ -44,7 +44,7 @@ export const products: Product[] = [
     brand: 'Adidas',
     rating: 4.3,
     sold: 6937,
-    price: 70,
+    price: 1599,
     image: '/images/app/s3.jpg',
   },
   {
@@ -53,7 +53,7 @@ export const products: Product[] = [
     brand: 'Nike',
     rating: 4.9,
     sold: 8174,
-    price: 75,
+    price: 1799,
     image: '/images/app/s4.jpg',
   },
   {
@@ -62,7 +62,7 @@ export const products: Product[] = [
     brand: 'Puma',
     rating: 4.6,
     sold: 6843,
-    price: 120,
+    price: 2799,
     image: '/images/app/s5.jpg',
   },
   {
@@ -71,7 +71,7 @@ export const products: Product[] = [
     brand: 'Fila',
     rating: 4.5,
     sold: 7758,
-    price: 90,
+    price: 2199,
     image: '/images/app/s6.jpg',
   },
 ]
@@ -96,7 +96,6 @@ export const brands: Brand[] = [
 
 export const popularFilters = ['All', 'Nike', 'Adidas', 'Puma', 'Fila']
 
-export const formatPrice = (value: number) =>
-  `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+export const formatPrice = (value: number) => `₹${value.toLocaleString('en-IN')}`
 
-export const formatSold = (value: number) => value.toLocaleString('en-US')
+export const formatSold = (value: number) => value.toLocaleString('en-IN')
