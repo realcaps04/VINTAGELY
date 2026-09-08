@@ -57,6 +57,104 @@ export const shippingAddresses: ShippingAddress[] = [
   },
 ]
 
+export type ShippingOptionId = 'economy' | 'regular' | 'cargo' | 'express'
+
+export type ShippingOption = {
+  id: ShippingOptionId
+  label: string
+  arrival: string
+  price: number
+}
+
+export const shippingOptions: ShippingOption[] = [
+  {
+    id: 'economy',
+    label: 'Economy',
+    arrival: 'Estimated Arrival, Dec 20-23',
+    price: 830,
+  },
+  {
+    id: 'regular',
+    label: 'Regular',
+    arrival: 'Estimated Arrival, Dec 20-22',
+    price: 1245,
+  },
+  {
+    id: 'cargo',
+    label: 'Cargo',
+    arrival: 'Estimated Arrival, Dec 19-20',
+    price: 1660,
+  },
+  {
+    id: 'express',
+    label: 'Express',
+    arrival: 'Estimated Arrival, Dec 18-19',
+    price: 2490,
+  },
+]
+
+export type OrderBucket = 'active' | 'completed'
+
+export type TrackingEvent = {
+  id: string
+  title: string
+  address: string
+  time: string
+}
+
+export type Order = {
+  id: string
+  productId: string
+  name: string
+  image: string
+  size: number
+  color: string
+  colorLabel: string
+  quantity: number
+  price: number
+  bucket: OrderBucket
+  badge: string
+  statusLabel: string
+  progressStage: number
+  tracking: TrackingEvent[]
+  placedAt: number
+}
+
+function buildTrackingTimeline(): TrackingEvent[] {
+  return [
+    {
+      id: 'transit',
+      title: 'Order In Transit - Dec 17',
+      address: '32 Manchester Ave. Ringgold, GA 30736',
+      time: '15:20 PM',
+    },
+    {
+      id: 'customs',
+      title: 'Order Arrived at Customs Port - Dec 16',
+      address: '4 Evergreen Street Lake Zurich, IL 60047',
+      time: '14:40 PM',
+    },
+    {
+      id: 'shipped',
+      title: 'Orders are Being Shipped - Dec 15',
+      address: '9177 Hillcrest Street Wheeling, WV 26003',
+      time: '11:30 AM',
+    },
+    {
+      id: 'packing',
+      title: 'Order is in Packing - Dec 15',
+      address: '891 Glen Ridge St. Gainesville, VA 20155',
+      time: '10:25 AM',
+    },
+    {
+      id: 'paid',
+      title: 'Verified Payments - Dec 15',
+      address: '55 Summerhouse Dr. Apopka, FL 32703',
+      time: '10:04 AM',
+    },
+  ]
+}
+
 type ShopValue = {
   query: string
   filters: ProductFilters
@@ -90,6 +188,20 @@ type ShopValue = {
   selectedAddressId: string
   setSelectedAddressId: (id: string) => void
   selectedAddress: ShippingAddress
+  isShippingPickerOpen: boolean
+  openShippingPicker: () => void
+  closeShippingPicker: () => void
+  selectedShippingId: ShippingOptionId | null
+  setSelectedShippingId: (id: ShippingOptionId) => void
+  selectedShipping: ShippingOption | null
+  orders: Order[]
+  placeOrder: (promoApplied?: boolean) => void
+  isOrderSuccessOpen: boolean
+  acknowledgeOrderSuccess: () => void
+  trackingOrderId: string | null
+  openOrderTracking: (orderId: string) => void
+  closeOrderTracking: () => void
+  trackingOrder: Order | null
   activeTab: TabId
   setActiveTab: (tab: TabId) => void
 }
@@ -109,12 +221,27 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const [selectedAddressId, setSelectedAddressId] = useState(
     shippingAddresses.find((address) => address.isDefault)?.id ?? shippingAddresses[0].id,
   )
+  const [isShippingPickerOpen, setIsShippingPickerOpen] = useState(false)
+  const [selectedShippingId, setSelectedShippingId] = useState<ShippingOptionId | null>(null)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [isOrderSuccessOpen, setIsOrderSuccessOpen] = useState(false)
+  const [trackingOrderId, setTrackingOrderId] = useState<string | null>(null)
   const [activeTab, setActiveTabState] = useState<TabId>('home')
 
   const selectedAddress = useMemo(
     () =>
       shippingAddresses.find((address) => address.id === selectedAddressId) ?? shippingAddresses[0],
     [selectedAddressId],
+  )
+
+  const selectedShipping = useMemo(
+    () => shippingOptions.find((option) => option.id === selectedShippingId) ?? null,
+    [selectedShippingId],
+  )
+
+  const trackingOrder = useMemo(
+    () => orders.find((order) => order.id === trackingOrderId) ?? null,
+    [orders, trackingOrderId],
   )
 
   const selectedProduct = useMemo(
@@ -155,6 +282,9 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     setIsSearchOpen(false)
     setIsFilterOpen(false)
     setIsCheckoutOpen(false)
+    setIsAddressPickerOpen(false)
+    setIsShippingPickerOpen(false)
+    setTrackingOrderId(null)
     setSelectedProductId(id)
   }, [])
   const closeProduct = useCallback(() => setSelectedProductId(null), [])
@@ -165,6 +295,8 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     setIsFilterOpen(false)
     setIsCheckoutOpen(false)
     setIsAddressPickerOpen(false)
+    setIsShippingPickerOpen(false)
+    setTrackingOrderId(null)
     setActiveTabState(tab)
   }, [])
 
@@ -173,18 +305,89 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     setIsFilterOpen(false)
     setSelectedProductId(null)
     setIsAddressPickerOpen(false)
+    setIsShippingPickerOpen(false)
+    setTrackingOrderId(null)
     setIsCheckoutOpen(true)
   }, [])
   const closeCheckout = useCallback(() => {
     setIsAddressPickerOpen(false)
+    setIsShippingPickerOpen(false)
     setIsCheckoutOpen(false)
   }, [])
 
   const openAddressPicker = useCallback(() => {
+    setIsShippingPickerOpen(false)
     setIsAddressPickerOpen(true)
   }, [])
   const closeAddressPicker = useCallback(() => {
     setIsAddressPickerOpen(false)
+  }, [])
+
+  const openShippingPicker = useCallback(() => {
+    setIsAddressPickerOpen(false)
+    setIsShippingPickerOpen(true)
+  }, [])
+  const closeShippingPicker = useCallback(() => {
+    setIsShippingPickerOpen(false)
+  }, [])
+
+  const placeOrder = useCallback(
+    (_promoApplied = false) => {
+      if (cart.length === 0 || !selectedShipping) return
+
+      const placedAt = Date.now()
+      const nextOrders: Order[] = cart.flatMap((line) => {
+        const product = products.find((entry) => entry.id === line.productId)
+        if (!product) return []
+        return [
+          {
+            id: `ord-${placedAt}-${line.id}`,
+            productId: product.id,
+            name: product.name,
+            image: product.image,
+            size: line.size,
+            color: line.color,
+            colorLabel: line.colorLabel,
+            quantity: line.quantity,
+            price: product.price,
+            bucket: 'active' as const,
+            badge: 'In Delivery',
+            statusLabel: 'Packet In Delivery',
+            progressStage: 2,
+            tracking: buildTrackingTimeline(),
+            placedAt,
+          },
+        ]
+      })
+
+      if (nextOrders.length === 0) return
+
+      setOrders((current) => [...nextOrders, ...current])
+      setCart([])
+      setSelectedShippingId(null)
+      setIsAddressPickerOpen(false)
+      setIsShippingPickerOpen(false)
+      setIsCheckoutOpen(false)
+      setIsOrderSuccessOpen(true)
+    },
+    [cart, selectedShipping],
+  )
+
+  const acknowledgeOrderSuccess = useCallback(() => {
+    setIsOrderSuccessOpen(false)
+    setTrackingOrderId(null)
+    setActiveTabState('orders')
+  }, [])
+
+  const openOrderTracking = useCallback((orderId: string) => {
+    setIsCheckoutOpen(false)
+    setSelectedProductId(null)
+    setTrackingOrderId(orderId)
+  }, [])
+
+  const closeOrderTracking = useCallback(() => {
+    setTrackingOrderId(null)
+    setActiveTabState('orders')
   }, [])
 
   const applyFilters = useCallback((next: ProductFilters) => {
@@ -277,6 +480,20 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       selectedAddressId,
       setSelectedAddressId,
       selectedAddress,
+      isShippingPickerOpen,
+      openShippingPicker,
+      closeShippingPicker,
+      selectedShippingId,
+      setSelectedShippingId,
+      selectedShipping,
+      orders,
+      placeOrder,
+      isOrderSuccessOpen,
+      acknowledgeOrderSuccess,
+      trackingOrderId,
+      openOrderTracking,
+      closeOrderTracking,
+      trackingOrder,
       activeTab,
       setActiveTab,
     }),
@@ -311,6 +528,19 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       closeAddressPicker,
       selectedAddressId,
       selectedAddress,
+      isShippingPickerOpen,
+      openShippingPicker,
+      closeShippingPicker,
+      selectedShippingId,
+      selectedShipping,
+      orders,
+      placeOrder,
+      isOrderSuccessOpen,
+      acknowledgeOrderSuccess,
+      trackingOrderId,
+      openOrderTracking,
+      closeOrderTracking,
+      trackingOrder,
       activeTab,
       setActiveTab,
     ],

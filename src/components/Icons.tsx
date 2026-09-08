@@ -62,6 +62,56 @@ export const TruckIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProp
   </svg>
 )
 
+export const PackageIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M12 3.5 20 8v8l-8 4.5L4 16V8l8-4.5Z" />
+    <path d="M12 12v8.5M12 12 4.2 7.6M12 12l7.8-4.4" />
+  </svg>
+)
+
+export const PackageCheckIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M12 3.5 20 8v8l-8 4.5L4 16V8l8-4.5Z" />
+    <path d="M12 12v8.5M12 12 4.2 7.6M12 12l7.8-4.4" />
+    <path d="m9.2 12.2 1.8 1.8 3.6-3.7" />
+  </svg>
+)
+
+export const ExpressTruckIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M2.5 9.5h2M1.5 12.5h2.5M2.5 15.5h2" />
+    <path d="M6.5 7.5H16v8H6.5z" />
+    <path d="M16 10.5h4l2 3v2h-6" />
+    <circle cx="9.5" cy="17.5" r="1.7" />
+    <circle cx="18" cy="17.5" r="1.7" />
+  </svg>
+)
+
+export const OpenBoxIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M4 9.5 12 5l8 4.5" />
+    <path d="M4 9.5v7.5L12 21l8-4V9.5" />
+    <path d="M12 12.5V21M12 12.5 5.5 9M12 12.5l6.5-3.5" />
+    <path d="M8 7.5 12 5l4 2.5" />
+  </svg>
+)
+
+export const CourierIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <circle cx="8" cy="6.5" r="2" />
+    <circle cx="16" cy="6.5" r="2" />
+    <path d="M5.5 20v-4.5A2.5 2.5 0 0 1 8 13h0a2.5 2.5 0 0 1 2.2 1.3L12 17l1.8-2.7A2.5 2.5 0 0 1 16 13h0a2.5 2.5 0 0 1 2.5 2.5V20" />
+    <path d="M10.5 11.5h3l1 3.5h-5l1-3.5Z" />
+  </svg>
+)
+
+export const SuccessCheckIcon = ({ className = 'h-10 w-10', strokeWidth = 2.2 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <circle cx="12" cy="12" r="9" />
+    <path d="m8 12.2 2.8 2.8L16.5 9" />
+  </svg>
+)
+
 export const EditIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
   <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
     <path d="m14.2 5.8 4 4M4.5 19.5l.8-4.2L15.8 5.8a1.8 1.8 0 0 1 2.5 0l.4.4a1.8 1.8 0 0 1 0 2.5L8.7 18.7l-4.2.8Z" />

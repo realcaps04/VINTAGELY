@@ -1,52 +1,77 @@
-import { useState } from 'react'
+import { useState, type ComponentType } from 'react'
 import { motion } from 'motion/react'
 import { formatPrice, products } from '../data/catalog'
-import { useShop } from '../store/shop'
+import { useShop, type ShippingOptionId } from '../store/shop'
 import {
   ArrowRightIcon,
   BackIcon,
-  ChevronRightIcon,
+  CloseIcon,
   EditIcon,
+  ExpressTruckIcon,
   MapPinIcon,
   MoreIcon,
+  PackageCheckIcon,
+  PackageIcon,
   PlusIcon,
   TruckIcon,
 } from './Icons'
 
-const SHIPPING_OPTIONS = [
-  { id: 'economy', label: 'Economy', detail: '5-7 days', price: 49 },
-  { id: 'regular', label: 'Regular', detail: '3-4 days', price: 99 },
-  { id: 'express', label: 'Express', detail: '1-2 days', price: 149 },
-] as const
+const PROMO_RATE = 0.3
+
+const SHIPPING_ICONS: Record<ShippingOptionId, ComponentType<{ className?: string }>> = {
+  economy: PackageCheckIcon,
+  regular: PackageIcon,
+  cargo: TruckIcon,
+  express: ExpressTruckIcon,
+}
 
 export function CheckoutScreen() {
-  const { cart, cartTotal, closeCheckout, openProduct, selectedAddress, openAddressPicker } =
-    useShop()
+  const {
+    cart,
+    cartTotal,
+    closeCheckout,
+    openProduct,
+    selectedAddress,
+    openAddressPicker,
+    selectedShipping,
+    openShippingPicker,
+    placeOrder,
+  } = useShop()
   const [promo, setPromo] = useState('')
-  const [appliedPromo, setAppliedPromo] = useState<string | null>(null)
-  const [shippingId, setShippingId] = useState<(typeof SHIPPING_OPTIONS)[number]['id'] | null>(null)
-  const [pickingShipping, setPickingShipping] = useState(false)
+  const [promoApplied, setPromoApplied] = useState(false)
 
-  const shipping = SHIPPING_OPTIONS.find((option) => option.id === shippingId) ?? null
-  const discount = appliedPromo ? Math.round(cartTotal * 0.1) : 0
-  const total = cartTotal - discount + (shipping?.price ?? 0)
+  const discount = promoApplied ? Math.round(cartTotal * PROMO_RATE) : 0
+  const shippingCost = selectedShipping?.price ?? 0
+  const total = cartTotal - discount + shippingCost
+  const ShippingIcon = selectedShipping
+    ? SHIPPING_ICONS[selectedShipping.id]
+    : TruckIcon
 
   const applyPromo = () => {
+    if (promoApplied) return
     const code = promo.trim()
-    if (!code) return
-    setAppliedPromo(code.toUpperCase())
+    if (!code) {
+      setPromoApplied(true)
+      return
+    }
+    setPromoApplied(true)
+    setPromo('')
+  }
+
+  const clearPromo = () => {
+    setPromoApplied(false)
     setPromo('')
   }
 
   return (
     <motion.div
-      className="relative min-h-dvh bg-[#f7f7f7] pb-44"
+      className="relative min-h-dvh bg-white pb-44"
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 16 }}
       transition={{ duration: 0.22 }}
     >
-      <header className="grid grid-cols-[1fr_auto_1fr] items-center bg-[#f7f7f7] px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
+      <header className="grid grid-cols-[1fr_auto_1fr] items-center bg-white px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
         <button
           type="button"
           onClick={closeCheckout}
@@ -133,16 +158,9 @@ export function CheckoutScreen() {
                         </span>
                       </div>
 
-                      <div className="mt-1.5 flex items-center gap-1.5 text-[12.5px] font-medium text-subtle">
-                        <span
-                          className="h-3 w-3 shrink-0 rounded-full border border-hairline"
-                          style={{ backgroundColor: line.color }}
-                          aria-hidden
-                        />
-                        <span className="truncate">
-                          {line.colorLabel} | Size = {line.size}
-                        </span>
-                      </div>
+                      <p className="mt-1.5 truncate text-[12.5px] font-medium text-subtle">
+                        {line.colorLabel} | Size = {line.size}
+                      </p>
 
                       <p className="mt-3 text-[16px] font-bold tracking-[-0.02em]">
                         {formatPrice(product.price)}
@@ -159,116 +177,98 @@ export function CheckoutScreen() {
           <h2 className="text-[18px] font-bold tracking-[-0.01em]">Choose Shipping</h2>
           <button
             type="button"
-            onClick={() => setPickingShipping((open) => !open)}
+            onClick={openShippingPicker}
             className="mt-3.5 flex w-full items-center gap-3.5 rounded-[28px] bg-white p-4 text-left shadow-[0_8px_24px_-16px_rgba(0,0,0,0.18)] transition-opacity duration-200 active:opacity-80"
           >
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-ink text-white">
-              <TruckIcon className="h-5 w-5" />
+              <ShippingIcon className="h-5 w-5" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-[15px] font-bold tracking-[-0.01em]">
-                {shipping ? shipping.label : 'Choose Shipping Type'}
+                {selectedShipping ? selectedShipping.label : 'Choose Shipping Type'}
               </span>
-              {shipping && (
-                <span className="mt-0.5 block text-[13px] font-medium text-subtle">
-                  {shipping.detail} · {formatPrice(shipping.price)}
+              {selectedShipping && (
+                <span className="mt-0.5 block truncate text-[13px] font-medium text-subtle">
+                  {selectedShipping.arrival}
                 </span>
               )}
             </span>
-            <ChevronRightIcon
-              className={`h-5 w-5 text-ink transition-transform duration-200 ${
-                pickingShipping ? 'rotate-90' : ''
-              }`}
-            />
+            {selectedShipping && (
+              <span className="shrink-0 text-[15px] font-bold tracking-[-0.01em]">
+                {formatPrice(selectedShipping.price)}
+              </span>
+            )}
+            <EditIcon className="h-5 w-5 shrink-0 text-ink" />
           </button>
-
-          {pickingShipping && (
-            <ul className="mt-2 overflow-hidden rounded-[24px] bg-white shadow-[0_8px_24px_-16px_rgba(0,0,0,0.18)]">
-              {SHIPPING_OPTIONS.map((option, index) => {
-                const isActive = option.id === shippingId
-                return (
-                  <li key={option.id}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setShippingId(option.id)
-                        setPickingShipping(false)
-                      }}
-                      className={`flex w-full items-center justify-between px-4 py-3.5 text-left transition-colors duration-200 active:bg-surface ${
-                        index > 0 ? 'border-t border-hairline' : ''
-                      }`}
-                    >
-                      <span>
-                        <span className="block text-[14px] font-semibold">{option.label}</span>
-                        <span className="text-[12px] font-medium text-subtle">{option.detail}</span>
-                      </span>
-                      <span
-                        className={`text-[14px] font-bold ${isActive ? 'text-ink' : 'text-subtle'}`}
-                      >
-                        {formatPrice(option.price)}
-                      </span>
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
         </div>
 
         <div className="mt-6">
           <h2 className="text-[18px] font-bold tracking-[-0.01em]">Promo Code</h2>
           <div className="mt-3.5 flex items-center gap-3">
-            <input
-              value={promo}
-              onChange={(event) => setPromo(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') applyPromo()
-              }}
-              placeholder="Enter Promo Code"
-              className="h-14 min-w-0 flex-1 rounded-full bg-surface px-5 text-[15px] font-medium text-ink outline-none placeholder:text-subtle"
-            />
+            {promoApplied ? (
+              <div className="flex h-14 min-w-0 flex-1 items-center justify-between gap-3 rounded-full bg-ink px-5 text-white">
+                <span className="truncate text-[15px] font-semibold">Discount 30% Off</span>
+                <button
+                  type="button"
+                  onClick={clearPromo}
+                  aria-label="Remove promo"
+                  className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/15 text-white transition-opacity duration-200 active:opacity-70"
+                >
+                  <CloseIcon className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <input
+                value={promo}
+                onChange={(event) => setPromo(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') applyPromo()
+                }}
+                placeholder="Enter Promo Code"
+                className="h-14 min-w-0 flex-1 rounded-full bg-surface px-5 text-[15px] font-medium text-ink outline-none placeholder:text-subtle"
+              />
+            )}
             <button
               type="button"
               onClick={applyPromo}
               aria-label="Add promo code"
-              className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-ink text-white transition-transform duration-200 active:scale-95"
+              disabled={promoApplied}
+              className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-ink text-white transition-transform duration-200 active:scale-95 disabled:opacity-40"
             >
               <PlusIcon className="h-5 w-5" />
             </button>
           </div>
-          {appliedPromo && (
-            <p className="mt-2 px-1 text-[12.5px] font-medium text-subtle">
-              Applied <span className="font-semibold text-ink">{appliedPromo}</span> · 10% off
-            </p>
-          )}
         </div>
 
-        <div className="mt-6 space-y-3 px-1 pb-4 text-[15px] font-semibold">
+        <div className="mt-6 mb-4 space-y-3.5 rounded-[28px] bg-[#f5f5f5] px-5 py-5 text-[15px] font-semibold">
           <div className="flex items-center justify-between">
             <span className="text-subtle">Amount</span>
             <span>{formatPrice(cartTotal)}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-subtle">Shipping</span>
-            <span>{shipping ? formatPrice(shipping.price) : '-'}</span>
+            <span>{selectedShipping ? formatPrice(selectedShipping.price) : '-'}</span>
           </div>
-          {appliedPromo && (
+          {promoApplied && (
             <div className="flex items-center justify-between">
               <span className="text-subtle">Promo</span>
-              <span>-{formatPrice(discount)}</span>
+              <span>- {formatPrice(discount)}</span>
             </div>
           )}
-          <div className="flex items-center justify-between text-[16px] font-bold">
-            <span className="text-subtle">Total</span>
-            <span>{shipping ? formatPrice(total) : '-'}</span>
+          <div className="border-t border-ink/10 pt-3.5">
+            <div className="flex items-center justify-between text-[16px] font-bold">
+              <span>Total</span>
+              <span>{formatPrice(total)}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+      <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 bg-gradient-to-t from-white via-white to-transparent px-5 pt-8 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
         <button
           type="button"
-          disabled={cart.length === 0}
+          disabled={cart.length === 0 || !selectedShipping}
+          onClick={() => placeOrder(promoApplied)}
           className="flex w-full items-center justify-center gap-2.5 rounded-full bg-ink py-4 text-[16px] font-bold text-white shadow-[0_12px_28px_-10px_rgba(0,0,0,0.45)] transition-opacity duration-200 active:opacity-80 disabled:opacity-40"
         >
           Continue to Payment
