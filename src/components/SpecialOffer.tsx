@@ -80,16 +80,16 @@ export function SpecialOffer() {
               className="w-full shrink-0 snap-start px-6"
             >
               <article
-                className="relative aspect-16/9 overflow-hidden rounded-[26px]"
+                className={`relative overflow-hidden rounded-[26px] ${offer.tone}`}
                 style={{ boxShadow: `0 18px 34px -18px ${offer.glow}` }}
               >
                 <img
                   src={offer.image}
                   alt=""
-                  className="absolute inset-0 h-full w-full object-cover"
+                  className="offer-fade pointer-events-none absolute inset-y-0 right-0 h-full w-[62%] object-contain object-right mix-blend-multiply"
                 />
 
-                <div className="relative flex h-full max-w-[58%] flex-col justify-center px-6">
+                <div className="relative max-w-[58%] px-6 py-7">
                   <p className="text-[42px] font-extrabold leading-none tracking-[-0.03em] text-white">
                     {offer.headline}
                   </p>

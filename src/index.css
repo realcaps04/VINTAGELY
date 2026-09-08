@@ -54,3 +54,9 @@
     display: none;
   }
 }
+
+/* Softens the left edge of the product shot into the card gradient. */
+@utility offer-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+}

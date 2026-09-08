@@ -82,7 +82,9 @@ export type Offer = {
   title: string
   body: string
   image: string
-  /** Drives the glow beneath the card so it picks up the artwork's colour. */
+  /** Tailwind gradient classes for the card face behind the product shot. */
+  tone: string
+  /** Soft coloured shadow under the card. */
   glow: string
 }
 
@@ -92,32 +94,27 @@ export const offers: Offer[] = [
     headline: '25%',
     title: "Today's Special!",
     body: 'Get discount for every order. only valid for today',
-    image: '/images/app/offer-red.jpg',
-    glow: 'rgba(198,13,22,0.5)',
+    image: '/images/app/offer-chuck-side.jpg',
+    tone: 'bg-linear-120 from-offer-500 via-offer-600 to-offer-700',
+    glow: 'rgba(198,13,22,0.55)',
   },
   {
     id: 'weekend',
     headline: '40%',
     title: 'Weekend Drop!',
     body: 'Selected sneakers at their lowest price this season',
-    image: '/images/app/offer-indigo.jpg',
-    glow: 'rgba(26,35,92,0.5)',
+    image: '/images/app/offer-chuck-pair.jpg',
+    tone: 'bg-linear-120 from-[#1a235c] via-[#24307a] to-[#3140a0]',
+    glow: 'rgba(26,35,92,0.55)',
   },
   {
     id: 'season',
     headline: '30%',
     title: 'New Season Sale!',
     body: 'Fresh arrivals marked down for a limited time only',
-    image: '/images/app/offer-emerald.jpg',
-    glow: 'rgba(15,79,58,0.5)',
-  },
-  {
-    id: 'clearance',
-    headline: '50%',
-    title: 'Clearance Deal!',
-    body: 'Last pairs from the previous drop, while stocks last',
-    image: '/images/app/offer-amber.jpg',
-    glow: 'rgba(178,72,24,0.5)',
+    image: '/images/app/offer-chuck-inner.jpg',
+    tone: 'bg-linear-120 from-[#0f4f3a] via-[#176b4e] to-[#1f8762]',
+    glow: 'rgba(15,79,58,0.55)',
   },
 ]
 
