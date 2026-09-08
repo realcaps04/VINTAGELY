@@ -10,6 +10,7 @@ export function CartScreen() {
     cartTotal,
     openSearch,
     openProduct,
+    openCheckout,
     updateCartQuantity,
     removeFromCart,
   } = useShop()
@@ -78,6 +79,7 @@ export function CartScreen() {
           <button
             type="button"
             disabled={cart.length === 0}
+            onClick={openCheckout}
             className="ml-auto flex items-center gap-2.5 rounded-full bg-ink py-3.5 pr-3.5 pl-6 text-[15px] font-bold text-white shadow-[0_10px_24px_-8px_rgba(0,0,0,0.4)] transition-opacity duration-200 active:opacity-80 disabled:opacity-40"
           >
             Checkout

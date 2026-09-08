@@ -8,7 +8,7 @@ import {
   type ProductFilters,
 } from '../data/catalog'
 
-export type TabId = 'home' | 'cart' | 'orders' | 'wallet' | 'profile'
+export type TabId = 'home' | 'cart' | 'orders' | 'profile'
 
 export type CartLine = {
   id: string
@@ -25,6 +25,37 @@ export type CartAddInput = {
   color: string
   quantity: number
 }
+
+export type ShippingAddress = {
+  id: string
+  label: string
+  line: string
+  isDefault?: boolean
+}
+
+export const shippingAddresses: ShippingAddress[] = [
+  {
+    id: 'home',
+    label: 'Home',
+    line: '61480 Sunbrook Park, PC 5679',
+    isDefault: true,
+  },
+  {
+    id: 'office',
+    label: 'Office',
+    line: '6993 Meadow Valley Terra, PC 3637',
+  },
+  {
+    id: 'apartment',
+    label: 'Apartment',
+    line: '21833 Clyde Gallagher, PC 4662',
+  },
+  {
+    id: 'parents',
+    label: "Parent's House",
+    line: '5259 Blue Bill Park, PC 4627',
+  },
+]
 
 type ShopValue = {
   query: string
@@ -50,6 +81,15 @@ type ShopValue = {
   addToCart: (item: CartAddInput) => void
   updateCartQuantity: (lineId: string, quantity: number) => void
   removeFromCart: (lineId: string) => void
+  isCheckoutOpen: boolean
+  openCheckout: () => void
+  closeCheckout: () => void
+  isAddressPickerOpen: boolean
+  openAddressPicker: () => void
+  closeAddressPicker: () => void
+  selectedAddressId: string
+  setSelectedAddressId: (id: string) => void
+  selectedAddress: ShippingAddress
   activeTab: TabId
   setActiveTab: (tab: TabId) => void
 }
@@ -64,7 +104,18 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
   const [wishlist, setWishlist] = useState<string[]>([])
   const [cart, setCart] = useState<CartLine[]>([])
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const [isAddressPickerOpen, setIsAddressPickerOpen] = useState(false)
+  const [selectedAddressId, setSelectedAddressId] = useState(
+    shippingAddresses.find((address) => address.isDefault)?.id ?? shippingAddresses[0].id,
+  )
   const [activeTab, setActiveTabState] = useState<TabId>('home')
+
+  const selectedAddress = useMemo(
+    () =>
+      shippingAddresses.find((address) => address.id === selectedAddressId) ?? shippingAddresses[0],
+    [selectedAddressId],
+  )
 
   const selectedProduct = useMemo(
     () => products.find((product) => product.id === selectedProductId) ?? null,
@@ -103,6 +154,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const openProduct = useCallback((id: string) => {
     setIsSearchOpen(false)
     setIsFilterOpen(false)
+    setIsCheckoutOpen(false)
     setSelectedProductId(id)
   }, [])
   const closeProduct = useCallback(() => setSelectedProductId(null), [])
@@ -111,7 +163,28 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     setSelectedProductId(null)
     setIsSearchOpen(false)
     setIsFilterOpen(false)
+    setIsCheckoutOpen(false)
+    setIsAddressPickerOpen(false)
     setActiveTabState(tab)
+  }, [])
+
+  const openCheckout = useCallback(() => {
+    setIsSearchOpen(false)
+    setIsFilterOpen(false)
+    setSelectedProductId(null)
+    setIsAddressPickerOpen(false)
+    setIsCheckoutOpen(true)
+  }, [])
+  const closeCheckout = useCallback(() => {
+    setIsAddressPickerOpen(false)
+    setIsCheckoutOpen(false)
+  }, [])
+
+  const openAddressPicker = useCallback(() => {
+    setIsAddressPickerOpen(true)
+  }, [])
+  const closeAddressPicker = useCallback(() => {
+    setIsAddressPickerOpen(false)
   }, [])
 
   const applyFilters = useCallback((next: ProductFilters) => {
@@ -195,6 +268,15 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       addToCart,
       updateCartQuantity,
       removeFromCart,
+      isCheckoutOpen,
+      openCheckout,
+      closeCheckout,
+      isAddressPickerOpen,
+      openAddressPicker,
+      closeAddressPicker,
+      selectedAddressId,
+      setSelectedAddressId,
+      selectedAddress,
       activeTab,
       setActiveTab,
     }),
@@ -221,6 +303,14 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       addToCart,
       updateCartQuantity,
       removeFromCart,
+      isCheckoutOpen,
+      openCheckout,
+      closeCheckout,
+      isAddressPickerOpen,
+      openAddressPicker,
+      closeAddressPicker,
+      selectedAddressId,
+      selectedAddress,
       activeTab,
       setActiveTab,
     ],

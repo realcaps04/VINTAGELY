@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { formatPrice, formatSold } from '../data/catalog'
 import { useShop } from '../store/shop'
+import { ImageOwnershipNotice } from './ImageOwnershipNotice'
 import {
   BackIcon,
   BagIcon,
@@ -9,6 +10,7 @@ import {
   HeartIcon,
   MinusIcon,
   PlusIcon,
+  ShareIcon,
   StarIcon,
 } from './Icons'
 
@@ -71,6 +73,7 @@ function ProductDetailView({
   const [quantity, setQuantity] = useState(1)
   const [expanded, setExpanded] = useState(false)
   const [inCart, setInCart] = useState(false)
+  const [shareHint, setShareHint] = useState<string | null>(null)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -81,10 +84,38 @@ function ProductDetailView({
     setInCart(false)
   }, [size, color, quantity])
 
+  useEffect(() => {
+    if (!shareHint) return
+    const timer = window.setTimeout(() => setShareHint(null), 1800)
+    return () => window.clearTimeout(timer)
+  }, [shareHint])
+
   const handleScroll = () => {
     const track = trackRef.current
     if (!track) return
     setImageIndex(Math.round(track.scrollLeft / track.clientWidth))
+  }
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/?product=${product.id}`
+    const payload = {
+      title: product.name,
+      text: `Check out ${product.name} on Vintagely — ${formatPrice(product.price)}`,
+      url,
+    }
+
+    try {
+      if (typeof navigator.share === 'function') {
+        await navigator.share(payload)
+        return
+      }
+      await navigator.clipboard.writeText(`${payload.text}\n${url}`)
+      setShareHint('Link copied')
+    } catch (error) {
+      // User cancelled the system sheet — nothing to show.
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      setShareHint('Unable to share')
+    }
   }
 
   const handleCartAction = () => {
@@ -118,6 +149,28 @@ function ProductDetailView({
           <BackIcon />
         </button>
 
+        <button
+          type="button"
+          onClick={() => void handleShare()}
+          aria-label="Share product"
+          className="absolute right-4 top-[max(1rem,calc(env(safe-area-inset-top)+0.35rem))] z-10 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-ink shadow-[0_2px_10px_rgba(0,0,0,0.08)] transition-transform duration-200 active:scale-90"
+        >
+          <ShareIcon className="h-5 w-5" />
+        </button>
+
+        <AnimatePresence>
+          {shareHint && (
+            <motion.p
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="absolute top-[max(4.25rem,calc(env(safe-area-inset-top)+3.5rem))] right-4 z-10 rounded-full bg-ink px-3 py-1.5 text-[12px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(0,0,0,0.35)]"
+            >
+              {shareHint}
+            </motion.p>
+          )}
+        </AnimatePresence>
+
         <div
           ref={trackRef}
           onScroll={handleScroll}
@@ -147,6 +200,8 @@ function ProductDetailView({
             )
           })}
         </div>
+
+        <ImageOwnershipNotice className="absolute bottom-4 left-4" />
       </div>
 
       <div className="px-6 pt-5">

@@ -2,6 +2,8 @@ import { AnimatePresence } from 'motion/react'
 import { BottomNav } from './components/BottomNav'
 import { BrandRow } from './components/BrandRow'
 import { CartScreen } from './components/CartScreen'
+import { CheckoutScreen } from './components/CheckoutScreen'
+import { ShippingAddressScreen } from './components/ShippingAddressScreen'
 import { FilterSheet } from './components/FilterSheet'
 import { HomeHeader } from './components/HomeHeader'
 import { MostPopular } from './components/MostPopular'
@@ -28,21 +30,35 @@ export default function App() {
 
 function Shell() {
   const { isAuthenticated } = useAuth()
-  const { isSearchOpen, isFilterOpen, query, filters, selectedProduct, activeTab } = useShop()
+  const {
+    isSearchOpen,
+    isFilterOpen,
+    query,
+    filters,
+    selectedProduct,
+    activeTab,
+    isCheckoutOpen,
+    isAddressPickerOpen,
+  } = useShop()
   const searchEmpty = query.trim().length > 0 && filterProducts(products, filters, query).length === 0
   const showingDetail = selectedProduct !== null
+  const hideChrome = showingDetail || isCheckoutOpen
 
   return (
     <div className="flex min-h-dvh justify-center">
       <div
         inert={isSearchOpen || isFilterOpen}
         className={`relative w-full max-w-[430px] bg-white shadow-[0_0_60px_rgba(0,0,0,0.08)] ${
-          showingDetail ? '' : 'pb-28'
+          hideChrome ? '' : 'pb-28'
         }`}
       >
         <AnimatePresence mode="wait">
           {showingDetail ? (
             <ProductDetail key="detail" />
+          ) : isCheckoutOpen && isAddressPickerOpen ? (
+            <ShippingAddressScreen key="address-picker" />
+          ) : isCheckoutOpen ? (
+            <CheckoutScreen key="checkout" />
           ) : (
             <div key={activeTab}>
               {activeTab === 'home' && (
@@ -65,9 +81,7 @@ function Shell() {
               {activeTab === 'profile' &&
                 (isAuthenticated ? <ProfileScreen /> : <SignInScreen />)}
 
-              {(activeTab === 'orders' || activeTab === 'wallet') && (
-                <PlaceholderScreen label={activeTab} />
-              )}
+              {activeTab === 'orders' && <PlaceholderScreen label={activeTab} />}
 
               <BottomNav />
             </div>

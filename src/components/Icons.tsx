@@ -53,6 +53,38 @@ export const ArrowRightIcon = ({ className = 'h-4 w-4', strokeWidth = 2.2 }: Ico
   </svg>
 )
 
+export const TruckIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="M3 7.5h10.5v8H3z" />
+    <path d="M13.5 10.5H18l2.5 3v2H13.5" />
+    <circle cx="7" cy="17.5" r="1.7" />
+    <circle cx="17" cy="17.5" r="1.7" />
+  </svg>
+)
+
+export const EditIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <path d="m14.2 5.8 4 4M4.5 19.5l.8-4.2L15.8 5.8a1.8 1.8 0 0 1 2.5 0l.4.4a1.8 1.8 0 0 1 0 2.5L8.7 18.7l-4.2.8Z" />
+  </svg>
+)
+
+export const MoreIcon = ({ className = 'h-5 w-5' }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+    <circle cx="6.5" cy="12" r="1.6" />
+    <circle cx="12" cy="12" r="1.6" />
+    <circle cx="17.5" cy="12" r="1.6" />
+  </svg>
+)
+
+export const ShareIcon = ({ className = 'h-5 w-5', strokeWidth = 1.8 }: IconProps) => (
+  <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
+    <circle cx="18" cy="5.5" r="2.5" />
+    <circle cx="6" cy="12" r="2.5" />
+    <circle cx="18" cy="18.5" r="2.5" />
+    <path d="m8.3 10.8 7.4-3.8M8.3 13.2l7.4 3.8" />
+  </svg>
+)
+
 export const BackIcon = ({ className = 'h-6 w-6', strokeWidth = 1.8 }: IconProps) => (
   <svg viewBox="0 0 24 24" className={className} {...stroke} strokeWidth={strokeWidth} aria-hidden>
     <path d="M15 5.5 8.5 12 15 18.5" />

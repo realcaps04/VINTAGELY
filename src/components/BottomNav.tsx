@@ -1,12 +1,11 @@
 import { motion } from 'motion/react'
 import { useShop } from '../store/shop'
-import { CartIcon, HomeIcon, OrdersIcon, ProfileIcon, WalletIcon } from './Icons'
+import { CartIcon, HomeIcon, OrdersIcon, ProfileIcon } from './Icons'
 
 const tabs = [
   { id: 'home', label: 'Home', Icon: HomeIcon },
   { id: 'cart', label: 'Cart', Icon: CartIcon },
   { id: 'orders', label: 'Orders', Icon: OrdersIcon },
-  { id: 'wallet', label: 'Wallet', Icon: WalletIcon },
   { id: 'profile', label: 'Profile', Icon: ProfileIcon },
 ] as const
 
