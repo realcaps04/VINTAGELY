@@ -72,7 +72,7 @@ export function ProductCard({ product }: { product: Product }) {
                 transition={{ duration: 0.16 }}
                 className="absolute bottom-[calc(100%+6px)] left-0 w-[148px] rounded-xl bg-ink px-2.5 py-2 text-[10.5px] font-medium leading-snug text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.35)]"
               >
-                Product images belong to their owners.
+                Product images belong to their Brands.
                 <span className="absolute -bottom-1 left-2.5 h-2 w-2 rotate-45 bg-ink" />
               </motion.div>
             )}
